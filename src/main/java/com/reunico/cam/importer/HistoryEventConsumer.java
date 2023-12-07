@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.camunda.bpm.engine.impl.history.event.HistoryEvent;
 import org.camunda.bpm.engine.impl.history.handler.DbHistoryEventHandler;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
@@ -28,16 +29,16 @@ public class HistoryEventConsumer {
 
 
 
-    @KafkaListener(id = "camunda.consumer", topics = "camunda.history")
-    public void listen(String raw) {
-        log.info("Message received={}", raw);
+    @KafkaListener(id = "camunda.consumer", topics = "#{'${spring.kafka.template.default-topic}'}")
+    public void listen(HistoryEvent historyEvent) {
+        log.info("Message received={}", historyEvent);
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         ProcessEngineConfigurationImpl processEngineConfiguration = (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
         CommandExecutor commandExecutor = processEngineConfiguration.getCommandExecutorTxRequired();
 
         Command<Object> command = commandContext -> {
             DbHistoryEventHandler dbHistoryEventHandler = new DbHistoryEventHandler();
-            dbHistoryEventHandler.handleEvent(historyDeserializer.deserializeRaw(raw));
+            dbHistoryEventHandler.handleEvent(historyEvent);
             return null;
         };
         commandExecutor.execute(command);

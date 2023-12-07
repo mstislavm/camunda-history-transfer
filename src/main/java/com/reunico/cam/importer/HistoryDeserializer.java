@@ -42,9 +42,14 @@ public class HistoryDeserializer {
         }
     }
 
-    private HistoryEvent castRaw(HistoryEventDto historyEventDto) throws ClassNotFoundException {
-        var clazz = Class.forName(historyEventDto.getHistoryClassName());
-        return (HistoryEvent) clazz.cast(historyEventDto.getHistoryEvent());
+    private <T extends HistoryEvent> T castRaw(HistoryEventDto historyEventDto) throws ClassNotFoundException {
+
+       //  Class clazz = Thread.currentThread().getContextClassLoader().loadClass(historyEventDto.getHistoryClassName());
+        // Class clazz = ClassLoader.getSystemClassLoader().loadClass(historyEventDto.getHistoryClassName());
+
+        var clazz =  (Class<T>) Class.forName(historyEventDto.getHistoryClassName());
+
+        return clazz.cast(historyEventDto.getHistoryEvent());
     }
 
 }

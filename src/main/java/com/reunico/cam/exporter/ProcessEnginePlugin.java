@@ -11,12 +11,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ProcessEnginePlugin extends AbstractProcessEnginePlugin {
 
-    private final ExternalHistoryEventHandler historyEventHandler;
-
     @Override
     public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
         log.info("Default History backend disabled");
-       // processEngineConfiguration.setEnableDefaultDbHistoryEventHandler(false);
-        processEngineConfiguration.setHistoryEventHandler(historyEventHandler);
+        processEngineConfiguration.setEnableDefaultDbHistoryEventHandler(false);
     }
 }
