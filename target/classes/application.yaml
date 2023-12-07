@@ -1,0 +1,16 @@
+spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+camunda.bpm.admin-user:
+  id: demo
+  password: demo
+server:
+  port: 8900
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info,metric
+spring:
+  kafka:
+    bootstrap-servers: localhost:29092
+    template:
+      default-topic: camunda.history
