@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.impl.history.event.HistoryEvent;
 import org.camunda.bpm.engine.impl.history.handler.HistoryEventHandler;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class HistorySerializer<T>  implements HistoryEventHandler {
     private final KafkaTemplate<String, T> kafkaTemplate;
 
     @Override
+    @Async
     public void handleEvent(HistoryEvent historyEvent) {
         kafkaTemplate.sendDefault(
                 historyEvent.getProcessInstanceId(),
