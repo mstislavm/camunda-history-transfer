@@ -1,7 +1,5 @@
 package com.reunico.cam.importer;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.impl.history.event.HistoryEvent;
@@ -14,10 +12,11 @@ import java.io.Serializable;
 
 @RequiredArgsConstructor
 @Slf4j
+@Component
 public class HistoryImportCommand implements Command<Object>, Serializable {
 
-    private final DbHistoryEventHandler eventHandler;
-    private final HistoryEvent historyEvent;
+    private DbHistoryEventHandler eventHandler;
+    private HistoryEvent historyEvent;
 
 
     @Override
