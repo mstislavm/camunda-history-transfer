@@ -9,6 +9,7 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.history.handler.DbHistoryEventHandler;
+import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
 import org.camunda.bpm.engine.impl.interceptor.CommandExecutorImpl;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -28,13 +29,19 @@ public class HistoryEventConsumer {
 
 
     @KafkaListener(id = "camunda.consumer", topics = "camunda.history")
-    public void listen(String raw) throws JsonProcessingException {
+    public void listen(String raw) {
+        log.info("Message received={}", raw);
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         ProcessEngineConfigurationImpl processEngineConfiguration = (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
         CommandExecutor commandExecutor = processEngineConfiguration.getCommandExecutorTxRequired();
 
-        log.info("Message received={}", raw);
-        commandExecutor.execute(historyDeserializer.deserialize(raw));
+        Command<Object> command = commandContext -> {
+            DbHistoryEventHandler dbHistoryEventHandler = new DbHistoryEventHandler();
+            dbHistoryEventHandler.handleEvent(historyDeserializer.deserializeRaw(raw));
+            return null;
+        };
+        commandExecutor.execute(command);
+
     }
 
 }
