@@ -1,4 +1,4 @@
-spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+spring.datasource.url: jdbc:h2:file:./camunda-h2-database;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1
 camunda.bpm.admin-user:
   id: demo
   password: demo
@@ -26,3 +26,13 @@ spring:
                 class: com.reunico.cam.importer.HistoryEventDeserializer
     template:
       default-topic: camunda.history
+camunda:
+  bpm:
+    job-execution:
+      core-pool-size: 25 # VSK
+      max-pool-size: 50 # VSK
+      queue-capacity: 10 # VSK
+      max-jobs-per-acquisition: 3 # Number of jobs acquired at once (in the database).
+      lock-time-in-millis: 300000 # Time the job will be locked for a specific job executor.
+      wait-time-in-millis: 5000 # Idle time for acquisition if no executable job was found
+

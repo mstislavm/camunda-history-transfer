@@ -2,3 +2,4 @@
 /camunda-h2-database.trace.db
 /.idea/
 /target/
+/camunda-h2-database.lock.db
