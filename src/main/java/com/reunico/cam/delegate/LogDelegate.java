@@ -30,8 +30,8 @@ public class LogDelegate implements JavaDelegate {
                 execution.getVariable("test"));
         execution.setVariable("demo", UUID.randomUUID().toString());
 
-        // managementService.createJobQuery().list(); //  проблемы
-        runtimeService.createProcessInstanceQuery().list(); // проблемы
+        managementService.createJobQuery().list(); //  проблемы
+        // runtimeService.createProcessInstanceQuery().list(); // проблемы
 
         // managementService.createJobQuery().count(); // нет проблем
         // repositoryService.createDeploymentQuery().list(); нет проблем
