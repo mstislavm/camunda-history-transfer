@@ -1,4 +1,4 @@
-spring.datasource.url: jdbc:h2:file:./camunda-h2-database;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1
+#spring.datasource.url: jdbc:h2:file:./camunda-h2-database;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1
 camunda.bpm.admin-user:
   id: demo
   password: demo
@@ -10,6 +10,14 @@ management:
       exposure:
         include: prometheus,health,info,metric
 spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5432/handler
+    username: postgres
+    password: 123
+    hikari:
+      auto-commit: false
+      pool-name: Hikari
   kafka:
     bootstrap-servers: localhost:29092
     producer:
@@ -29,8 +37,8 @@ spring:
 camunda:
   bpm:
     job-execution:
-      core-pool-size: 25 # VSK
-      max-pool-size: 50 # VSK
+      core-pool-size: 50 # VSK
+      max-pool-size: 100 # VSK
       queue-capacity: 10 # VSK
       max-jobs-per-acquisition: 3 # Number of jobs acquired at once (in the database).
       lock-time-in-millis: 300000 # Time the job will be locked for a specific job executor.

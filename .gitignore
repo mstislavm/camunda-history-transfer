@@ -3,3 +3,4 @@
 /.idea/
 /target/
 /camunda-h2-database.lock.db
+/config/
